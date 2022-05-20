@@ -66,3 +66,18 @@ python
 b'{\n  "heos": {\n    "command": "player/get_now_playing_media",\n    "result": "success",\n    "message": "pid=735067990"\n  },\n  "payload": {\n    
 ```
 And same is also working from another container, which we use for UI (as we can not use compose here)
+
+If error to del image via container station use ssh (this is needed when pushed same tag)
+```commandline
+docker image rm 981e8a99b878 118c43dad86a d52a5eb4997e 17f3a401dac2 --force
+```
+
+Rather than using container station UI could do:
+
+```commandline
+docker run --volume=/Container/config:/working_dir/api-server/config -p 5000:5000 --name heos-api-server scoulomb/heos-api-server:1.0.0
+```
+
+but even if can see volume in UI, it does not do the mount.
+
+Note `local.nas.coulombel.net` is a A record to NAS local IP (I do not like it because not generic)
