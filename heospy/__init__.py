@@ -306,9 +306,15 @@ This needs a JSON config file with a minimal content:
             elif ("player/" in cmd or "players" in cmd) and not pid_explicitly_given:
                 logging.info("I assume default player with id {0}".format(self.pid))
                 s = '{0}?pid={1}'.format(cmd, self.pid)
+            elif ("browse/" in cmd and "play_" in cmd) and not pid_explicitly_given:
+                # play_preset, play_next...
+                logging.info("I assume default player with id {0}".format(self.pid))
+                s = '{0}?pid={1}'.format(cmd, self.pid)
             else:
                 s = '{0}?dummy=1'.format(cmd) # use dummy so that
                                               # args_concatenated is correctly attached
+
+        print(s+args_concatenated)
 
         return self.telnet_request(s + args_concatenated)
     

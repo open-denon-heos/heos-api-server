@@ -1,0 +1,8 @@
+version: "3.6"
+services:
+  server:
+    image: scoulomb/heos-api-server:1.0.0
+    ports:
+      - 5000:5000
+    volumes:
+      - /home/scoulomb/heospy/api-server/config:/working_dir/api-server/config

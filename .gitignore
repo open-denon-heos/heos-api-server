@@ -9,3 +9,4 @@ dist
 .tox
 heospy/_version.py
 
+.idea

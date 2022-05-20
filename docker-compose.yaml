@@ -1,0 +1,11 @@
+version: "3.6"
+services:
+  server:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    image: heos-server
+    ports:
+      - 5000:5000
+    volumes:
+      - /home/scoulomb/heospy/api-server/config:/working_dir/api-server/config
