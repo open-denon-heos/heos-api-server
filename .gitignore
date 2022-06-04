@@ -3,10 +3,7 @@ config.json
 *.pyc
 build
 dist
-*.egg-info
-.DS_Store
 
-.tox
 heospy/_version.py
 
 .idea
