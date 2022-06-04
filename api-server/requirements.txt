@@ -1,4 +1,4 @@
 six
 future
 flask
-git+https://github.com/ping13/heospy.git#egg=heospy
+git+https://github.com/open-denon-heos/heospy.git#egg=heospy

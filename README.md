@@ -1,7 +1,7 @@
 # API Server
 
 Objective: API server to query HEOS telnet interface.
-Do not impact original heospy package (only bug fix if needed and fix original repo via PR)
+It leverages https://github.com/open-denon-heos/heospy.
 
 ## Local setup
 
@@ -92,6 +92,13 @@ See https://github.com/wallabag/docker/issues/164.
         - `/working_dir/api-server/config`
 - click `create`
 
+Rather than using container station UI could do:
+
+```commandline
+docker run --volume=/Container/config:/working_dir/api-server/config -p 5000:5000 --name heos-api-server scoulomb/heos-api-server:1.0.0
+```
+
+
 ### Without volume mapping
 
 We will leverage environment var.
@@ -102,8 +109,17 @@ Copy [docker compose YAML file](../PRD.docker-compose.yaml).
 
 Be sure to delete existing container and then image when pushing same tag.
 
+If error to del image via container station use ssh (this is needed when pushed same tag)
+```commandline
+docker image rm 981e8a99b878 118c43dad86a d52a5eb4997e 17f3a401dac2 --force
+```
 
-We can open a shell in browser and can see we can target inside container API:
+## Prepare for client (UI)
+
+UI can be in compose file (will create a network) but can also use (with port mapping or host network) loopback ip
+
+We can open a shell in browser from another container and can do
+
 ```commandline
 python
 >>> import urllib.request
@@ -111,26 +127,12 @@ python
 >>> print(contents)
 b'{\n  "heos": {\n    "command": "player/get_now_playing_media",\n    "result": "success",\n    "message": "pid=735067990"\n  },\n  "payload": {\n    
 ```
-And same is also working from another container, which we use for UI (as we can not use compose here)
-
-If error to del image via container station use ssh (this is needed when pushed same tag)
-```commandline
-docker image rm 981e8a99b878 118c43dad86a d52a5eb4997e 17f3a401dac2 --force
-```
-
-Rather than using container station UI could do:
-
-```commandline
-docker run --volume=/Container/config:/working_dir/api-server/config -p 5000:5000 --name heos-api-server scoulomb/heos-api-server:1.0.0
-```
-
-but even if can see volume in UI, it does not do the mount.
-
-Note `local.nas.coulombel.net` is a A record to NAS local IP (I do not like it because not generic)
 
 
-buble upnap  can find url and this what is returned by get now playing media
-http://192.168.1.88:8200/MediaItems/A0$128$141$131335$29098244
-fill queue via anpa playlist and heos app
+<!--
 
-try https://gist.github.com/SKempin/b7857a6ff6bddb05717cc17a44091202 and move a level up
+We can define `local.nas.coulombel.net` as A record to NAS local IP.
+index.html will now point node ip due to improvement made via {{local_ip}} in templates/index.html
+
+-->
+
