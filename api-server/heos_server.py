@@ -1,3 +1,4 @@
+import socket
 from flask import Flask, request, render_template, Response
 
 from heospy import *
@@ -82,7 +83,7 @@ def execute(cmd, subcmd):
 
 @app.route("/")
 def sample():
-    return render_template("index.html")
+    return render_template("index.html", local_ip=_get_host_local_ip())
 
 
 '''
