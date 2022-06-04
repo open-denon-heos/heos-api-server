@@ -11,8 +11,9 @@ COPY ./api-server/*.py ./api-server/
 COPY ./heospy ./heospy/
 RUN pwd
 WORKDIR /working_dir/api-server
-ENV FLASK_APP heos_server
+RUN mkdir config
 
+ENV FLASK_APP heos_server
 ENTRYPOINT ["flask", "run", "--port", "5000", "--host", "0.0.0.0"]
 
 EXPOSE 5000/tcp

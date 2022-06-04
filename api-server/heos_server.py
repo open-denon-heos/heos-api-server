@@ -6,6 +6,30 @@ app = Flask(__name__)
 app.debug = True
 
 
+def _get_host_local_ip():
+    # https://stackoverflow.com/questions/166506/finding-local-ip-addresses-using-pythons-stdlib
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    host_ip = s.getsockname()[0]
+    s.close()
+    return host_ip
+
+
+def _config_from_env_var():
+    """
+    This is very convenient when config file volume mapping is not possible (cf. QNAP NAS where not supported in compose file,
+    """
+
+    if os.environ.get("CONF_PLAYER_NAME") is None or os.environ.get("CONF_USER") is None or os.environ.get(
+            "CONF_PW") is None:
+        return
+    config_file = "/working_dir/api-server/config/config.json"
+    with open(config_file, "w") as json_data_file:
+        json.dump(
+            {"player_name": os.environ.get("CONF_PLAYER_NAME").strip(), "user": os.environ.get("CONF_USER").strip(),
+             "pw": os.environ.get("CONF_PW").strip()}, json_data_file, indent=2)
+
+
 def _setup(rediscover):
     try:
         logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s')
@@ -34,8 +58,8 @@ def _setup(rediscover):
 
 @app.before_first_request
 def setup():
+    _config_from_env_var()
     p = _setup(False)
-    logging.info(p.status())
 
 
 @app.route("/status")
