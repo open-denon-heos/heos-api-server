@@ -3,7 +3,17 @@
 Objective: API server to query HEOS telnet interface.
 It leverages https://github.com/open-denon-heos/heospy.
 
-## Local setup
+## Quick start
+
+````commandline
+docker-compose -f PRD.docker-compose.yaml up
+````
+Browse to [http://localhost:5000/](http://localhost:5000) to see sample of API calls.
+It is also visible [here](./api-server/templates/index.html).
+
+## Dev guide
+
+### Local setup
 
 ```commandline
 pip install -r requirements.txt 
@@ -11,7 +21,7 @@ export FLASK_APP=heos_server
 flask run
 ```
 
-## Using Docker in dev mode
+### Using Docker in dev mode
 
 ```commandline
 docker build . -t heos-server
@@ -48,7 +58,7 @@ This is convenient in environment where volume mapping is not possible (for [exa
 However volume mapping avoid a new discovery at every container restart.
 It can be used in combination ith volume but it will overwrite the config file.
 
-## Using Docker compose in dev mode
+### Using Docker compose in dev mode
 
 See [docker compose](../docker-compose.yaml).
 
@@ -58,7 +68,7 @@ docker-compose up --build
 ````
 
 
-## Deliver docker image
+### Deliver docker image
 
 ````commandline
 docker build . -t scoulomb/heos-api-server:1.0.0
@@ -66,7 +76,7 @@ docker login
 docker push scoulomb/heos-api-server:1.0.0
 ````
 
-## Run production image 
+### Run production image 
 
 See [docker compose](../PRD.docker-compose.yaml).
 
@@ -75,9 +85,9 @@ docker-compose -f PRD.docker-compose.yaml up
 ````
 
 
-## Run on QNAP NAS
+### Run on QNAP NAS
 
-### With volume mapping
+#### With volume mapping
 
 Note we can not use compose with QNAP as we have a volume via: Go to `Container station`.
 See https://github.com/wallabag/docker/issues/164.
@@ -99,7 +109,7 @@ docker run --volume=/Container/config:/working_dir/api-server/config -p 5000:500
 ```
 
 
-### Without volume mapping
+#### Without volume mapping
 
 We will leverage environment var.
 
@@ -114,7 +124,7 @@ If error to del image via container station use ssh (this is needed when pushed 
 docker image rm 981e8a99b878 118c43dad86a d52a5eb4997e 17f3a401dac2 --force
 ```
 
-## Prepare for client (UI)
+### Prepare for client (UI)
 
 UI can be in compose file (will create a network) but can also use (with port mapping or host network) loopback ip
 
