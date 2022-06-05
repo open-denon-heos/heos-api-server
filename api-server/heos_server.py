@@ -66,7 +66,9 @@ def setup():
 @app.route("/status")
 def status():
     p = _setup(False)
-    return Response(json.dumps(p.status(), indent=2), mimetype='application/json')
+    resp = Response(json.dumps(p.status(), indent=2), mimetype='application/json').headers.add("Access-Control-Allow-Origin", "*")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 @app.route("/<cmd>/<subcmd>")
@@ -78,7 +80,9 @@ def execute(cmd, subcmd):
         args[key] = value
 
     all_results = p.cmd(f"{cmd}/{subcmd}", args)
-    return Response(json.dumps(all_results, indent=2), mimetype='application/json')
+    resp = Response(json.dumps(all_results, indent=2), mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 @app.route("/")
@@ -100,7 +104,9 @@ def power_on():
     command = "PWON"
     telnet.write(command.encode('ascii') + b'\n')
     all_results = p.cmd(f"player/get_play_state", {})
-    return Response(json.dumps(all_results, indent=2), mimetype='application/json')
+    resp = Response(json.dumps(all_results, indent=2), mimetype='application/json')
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 @app.route("/off")
@@ -111,4 +117,6 @@ def power_off():
     command = "PWSTANDBY"
     telnet.write(command.encode('ascii') + b'\n')
     all_results = p.cmd(f"player/get_play_state", {})
-    return Response(json.dumps(all_results, indent=2), mimetype='application/json')
+    resp = Response(json.dumps(all_results, indent=2), mimetype='application/json').headers.add("Access-Control-Allow-Origin", "*")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
